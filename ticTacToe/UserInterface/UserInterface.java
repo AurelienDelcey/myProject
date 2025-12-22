@@ -1,9 +1,13 @@
 package ticTacToe.UserInterface;
 
-/**
- *
- * @author aurélien
- */
+import ticTacToe.Logic.GameStateHolder;
+import ticTacToe.Logic.TicTacToeLogic;
+import ticTacToe.Logic.TurnStateHolder;
+import ticTacToe.Model.GameState;
+import ticTacToe.Model.Turn;
+import ticTacToe.Model.Grid;
+import ticTacToe.Model.ButtonState;
+
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -14,14 +18,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import ticTacToe.DAO.ButtonState;
-import ticTacToe.DAO.Grid;
-import ticTacToe.Util.*;
 
 
 public class UserInterface extends Application{
     
-    private Logic logic;
+    private TicTacToeLogic gameLogic;
     private Grid grid;
     private TurnStateHolder turnStateHolder;
     private GameStateHolder gameStateHolder;
@@ -32,7 +33,7 @@ public class UserInterface extends Application{
         this.turnStateHolder.setTurn(Turn.O_TURN);
         this.gameStateHolder.setState(GameState.CONTINUE);
         this.grid = new Grid(3);
-        this.logic = new Logic(this.grid, this.gameStateHolder);
+        this.gameLogic = new TicTacToeLogic(this.grid, this.gameStateHolder, this.turnStateHolder);
     }
     
     
@@ -41,6 +42,11 @@ public class UserInterface extends Application{
         BorderPane layout = new BorderPane();
         
         GridPane graphicGrid = gridFactory(this.grid.size());
+        
+        Button resetButton = new Button("RESET");
+        resetButton.setPrefSize(150,60);
+        resetButton.setFont(Font.font(25));
+        resetButton.setOnAction(e->gameStateHolder.setState(GameState.NEW_GAME));
         
         Label turnMessage = new Label("Turn: O");
         turnMessage.setAlignment(Pos.CENTER);
@@ -53,15 +59,21 @@ public class UserInterface extends Application{
             switch(newState){
                 case NO_WINNER :
                     turnMessage.setText("DRAW");
-                    disableButtons(graphicGrid);
+                    disableButtons(graphicGrid,true);
                     break;
                 case VICTORY_O :
                     turnMessage.setText("O is the winner!");
-                    disableButtons(graphicGrid);
+                    disableButtons(graphicGrid,true);
                     break;
                 case VICTORY_X :
                     turnMessage.setText("X is the winner!");
-                    disableButtons(graphicGrid);
+                    disableButtons(graphicGrid,true);
+                    break;
+                case NEW_GAME :
+                    gameLogic.resetGrid();
+                    disableButtons(graphicGrid,false);
+                    clearButtons(graphicGrid);
+                    gameStateHolder.setState(GameState.CONTINUE);
                     break;
                 default :
                     break;
@@ -75,9 +87,11 @@ public class UserInterface extends Application{
         
         layout.setTop(turnMessage);
         layout.setCenter(graphicGrid);
+        layout.setBottom(resetButton);
         
         Scene scene = new Scene(layout);
         stage.setScene(scene);
+        stage.setTitle("Tic Tac Toe!");
         stage.show();
         
     }
@@ -117,16 +131,21 @@ public class UserInterface extends Application{
             this.turnStateHolder.setTurn(Turn.O_TURN);
         }
         
-        this.logic.checkGrid();
+        this.gameLogic.checkGrid();
     }
     
-    private void disableButtons(GridPane graphicGrid){
+    private void disableButtons(GridPane graphicGrid, boolean state){
         graphicGrid.getChildren().stream()
                 .filter(i->i instanceof Button)
                 .map(i->(Button)i)
-                .forEach(i->i.setDisable(true));
+                .forEach(i->i.setDisable(state));
     }
     
+    private void clearButtons(GridPane graphicGrid){
+        graphicGrid.getChildren().stream()
+                .filter(i->i instanceof Button)
+                .map(i->(Button)i)
+                .forEach(i->i.setText(""));
+    }
     
 }
-
