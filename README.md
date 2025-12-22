@@ -22,23 +22,23 @@ This project was created as a learning exercise to practice JavaFX, application 
 The project follows a clear separation of concerns:
 
 ### UI Layer
-- `UserInterface`  
+- **UserInterface**  
   Handles JavaFX components and user interactions.
 
 ### Game Logic
-- `TicTacToeLogic`  
+- **TicTacToeLogic**  
   Contains all game rules and win/draw detection.
 
 ### State Management
-- `GameStateHolder`  
-- `TurnStateHolder`  
+- **GameStateHolder**
+- **TurnStateHolder**  
   Uses JavaFX observable properties to notify the UI of state changes.
 
 ### Data Model
-- `Grid`  
-- `ButtonState`
-- `GameState`
-- `Turn`
+- **Grid**
+- **ButtonState**
+- **GameState**
+- **Turn**
 
 This structure ensures that the game logic is fully independent from the UI.
 
@@ -50,38 +50,35 @@ This structure ensures that the game logic is fully independent from the UI.
 2. Make sure **JavaFX** is properly configured
 3. Run the main class:
 
-```java
-TicTacToeApplication
+---
 
-🧰 Technologies Used
+## 🧰 Technologies Used
 
-    Java
+- Java
+- JavaFX
+- Java Streams
+- JavaFX Properties (Observable Pattern)
 
-    JavaFX
+---
 
-    Java Streams
-
-    JavaFX Properties (Observable Pattern)
-
-
-🎯 Learning Objectives
+## 🎯 Learning Objectives
 
 This project focuses on:
 
-    JavaFX event-driven programming
+- JavaFX event-driven programming
+- Separation of UI and business logic
+- State-driven application design
+- Clean and maintainable code structure
 
-    Separation of UI and business logic
+---
 
-    State-driven application design
+## 📌 Future Improvements
 
-    Clean and maintainable code structure
+- Add unit tests for game logic
+- Add single-player mode (AI)
 
-📌 Future Improvements
+---
 
-    Add unit tests for game logic
-
-    Add single-player mode (AI)
-
-👤 Author
+## 👤 Author
 
 Aurélien
